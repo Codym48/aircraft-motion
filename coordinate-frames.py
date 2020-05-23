@@ -1,11 +1,11 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,md,py:light
+#     formats: ipynb,md,py:nomarker
 #     text_representation:
 #       extension: .py
-#       format_name: light
-#       format_version: '1.5'
+#       format_name: nomarker
+#       format_version: '1.0'
 #       jupytext_version: 1.4.2
 #   kernelspec:
 #     display_name: Python 3
@@ -67,7 +67,6 @@
 
 # # Coordinate Frames
 
-# +
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
@@ -75,7 +74,6 @@ from mpl_toolkits import mplot3d
 iUnitVec = np.array([[1],[0],[0]])
 jUnitVec = np.array([[0],[1],[0]])
 kUnitVec = np.array([[0],[0],[1]])
-# -
 
 # Setup BaseNED origin and coordinate frame
 trueBaseNEDxUnitVec = iUnitVec
@@ -93,7 +91,6 @@ trueBaseNEDzUnitVec = kUnitVec
 # $\tilde{T}_{B/N}$ | trueRotBodyFromBaseNED
 # $\tilde{T}_{N/B}$ | trueRotBaseNEDfromBody
 
-# +
 # Setup Body origin and coordinate frame
 trueBodyXunitVec = iUnitVec
 trueBodyYunitVec = jUnitVec
@@ -111,7 +108,6 @@ trueRotBaseNEDfromBody = trueRotBodyFromBaseNED.transpose()
 trueBodyXunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyXunitVec
 trueBodyYunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyYunitVec
 trueBodyZunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyZunitVec
-# -
 
 # Apparently, matrix math in numpy requires the @ operator, not the * operator
 print(trueRotBaseNEDfromBody)
@@ -153,7 +149,6 @@ print(trueRotBaseNEDfromBody@trueBodyXunitVec)
 # $\vec{r}^S_B=\vec{r}^S_{B/S}$ | trueBodyPosStation
 # $\vec{r}^B_{B/S}$ | trueStationToBodyPosBody
 
-# +
 # Setup Station origin and coordinate frame
 trueStationXunitVec = iUnitVec
 trueStationYunitVec = jUnitVec
@@ -176,7 +171,6 @@ print(trueBodyPosStation)
 trueStationXunitVecBaseNED = trueRotBaseNEDfromStation@trueStationXunitVec
 trueStationYunitVecBaseNED = trueRotBaseNEDfromStation@trueStationYunitVec
 trueStationZunitVecBaseNED = trueRotBaseNEDfromStation@trueStationZunitVec
-# -
 
 # ## Housing Frame (H)
 # This coordinate frame tracks how the stationary part of the gimbal is mounted onto the airframe. The origin is at the center of rotation of the gimbal, which is almost never the origin of the **Body (B)** or **Station (S)** frames.
@@ -201,7 +195,6 @@ trueStationZunitVecBaseNED = trueRotBaseNEDfromStation@trueStationZunitVec
 # $\tilde{T}_{H/S}$ | trueRotHousingFromStation
 # $\tilde{T}_{S/H}$ | trueRotStationFromHousing
 
-# +
 # Setup Housing origin and coordinate frame
 trueHousingXunitVec = iUnitVec
 trueHousingYunitVec = jUnitVec
@@ -221,7 +214,6 @@ trueRotBaseNEDfromHousing = trueRotBaseNEDfromBody@trueRotBodyFromStation@trueRo
 trueHousingXunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingXunitVec
 trueHousingYunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingYunitVec
 trueHousingZunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingZunitVec
-# -
 
 # ## Target (T)
 # Initialized with a position offset relative to **BaseNED (N)**
@@ -280,7 +272,6 @@ trueHousingToTgtPosBaseNED = trueTgtPosBaseNED - trueHousingPosBaseNED
 # ## Stuck Gimbal
 # Consider a mathematically simple, although tactically useless, gimbal model in which the **Gimbal (G)** is stuck at a fixed orientation a few degrees away from boresight of the **Housing (H)** frame in both azimuth and elevation.
 
-# +
 # Setup Gimbal coordinate frame
 trueGimbalXunitVec = iUnitVec
 trueGimbalYunitVec = jUnitVec
@@ -304,7 +295,6 @@ trueGimbalXunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalXunitVec
 trueGimbalYunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalYunitVec
 trueGimbalZunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalZunitVec
 
-# +
 # %matplotlib notebook
 fig = plt.figure()
 ax = plt.axes(projection="3d")
@@ -340,7 +330,6 @@ ax.view_init(30,20)
 ax.legend()
 
 plt.show()
-# -
 
 # ## Ideal Gimbal
 # In some cases, an ideal gimbal would always point at the target. We can use other geometric terms to calculate the rotational offset between the **Gimbal (G)** and **Housing (H)** frames that achieves this goal...
