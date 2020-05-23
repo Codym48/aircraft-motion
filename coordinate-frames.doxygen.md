@@ -1,4 +1,4 @@
-/*
+<!--
 jupyter:
   jupytext:
     formats: ipynb,md,py:percent
@@ -11,10 +11,7 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
-*/
-
-/**
-\page coordinate-frames-dox
+-->
 
 # Vector Nomenclature
 Points in 3D space shall be given unique names: \f$A\f$, \f$B\f$, etc.
@@ -71,7 +68,7 @@ Symbol | Variable
 
 # Coordinate Frames
 
-\code{.py}
+```python
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
@@ -79,14 +76,14 @@ from mpl_toolkits import mplot3d
 iUnitVec = np.array([[1],[0],[0]])
 jUnitVec = np.array([[0],[1],[0]])
 kUnitVec = np.array([[0],[0],[1]])
-\endcode
+```
 
-\code{.py}
+```python
 # Setup BaseNED origin and coordinate frame
 trueBaseNEDxUnitVec = iUnitVec
 trueBaseNEDyUnitVec = jUnitVec
 trueBaseNEDzUnitVec = kUnitVec
-\endcode
+```
 
 ## Body Frame (B)
 The origin of this frame is the center of gravity (CG) of the flight vehicle. The position and attitude of this coordinate frame relative to others like **BaseNED (N)** will change over the course of flight.
@@ -99,7 +96,7 @@ Symbol | Variable
 \f$\tilde{T}_{B/N}\f$ | trueRotBodyFromBaseNED
 \f$\tilde{T}_{N/B}\f$ | trueRotBaseNEDfromBody
 
-\code{.py}
+```python
 # Setup Body origin and coordinate frame
 trueBodyXunitVec = iUnitVec
 trueBodyYunitVec = jUnitVec
@@ -117,16 +114,16 @@ trueRotBaseNEDfromBody = trueRotBodyFromBaseNED.transpose()
 trueBodyXunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyXunitVec
 trueBodyYunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyYunitVec
 trueBodyZunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyZunitVec
-\endcode
+```
 
-\code{.py}
+```python
 # Apparently, matrix math in numpy requires the @ operator, not the * operator
 print(trueRotBaseNEDfromBody)
 print(trueBodyXunitVec)
 print(trueRotBaseNEDfromBody*trueBodyXunitVec)
 print(np.matmul(trueRotBaseNEDfromBody,trueBodyXunitVec))
 print(trueRotBaseNEDfromBody@trueBodyXunitVec)
-\endcode
+```
 
 ## Station Frame (S)
 The origin of this frame is a fixed point on the body of the flight vehicle. We track this frame separately from **Body (B)** because the origin of that frame, the center of gravity (CG), may move in flight as fuel is consumed. We also allow a rotational offset between this frame and **Body (B)** for maximum flexbility.
@@ -161,7 +158,7 @@ Symbol | Variable
 \f$\vec{r}^S_B=\vec{r}^S_{B/S}\f$ | trueBodyPosStation
 \f$\vec{r}^B_{B/S}\f$ | trueStationToBodyPosBody
 
-\code{.py}
+```python
 # Setup Station origin and coordinate frame
 trueStationXunitVec = iUnitVec
 trueStationYunitVec = jUnitVec
@@ -184,7 +181,7 @@ print(trueBodyPosStation)
 trueStationXunitVecBaseNED = trueRotBaseNEDfromStation@trueStationXunitVec
 trueStationYunitVecBaseNED = trueRotBaseNEDfromStation@trueStationYunitVec
 trueStationZunitVecBaseNED = trueRotBaseNEDfromStation@trueStationZunitVec
-\endcode
+```
 
 ## Housing Frame (H)
 This coordinate frame tracks how the stationary part of the gimbal is mounted onto the airframe. The origin is at the center of rotation of the gimbal, which is almost never the origin of the **Body (B)** or **Station (S)** frames.
@@ -209,7 +206,7 @@ Symbol | Variable
 \f$\tilde{T}_{H/S}\f$ | trueRotHousingFromStation
 \f$\tilde{T}_{S/H}\f$ | trueRotStationFromHousing
 
-\code{.py}
+```python
 # Setup Housing origin and coordinate frame
 trueHousingXunitVec = iUnitVec
 trueHousingYunitVec = jUnitVec
@@ -229,7 +226,7 @@ trueRotBaseNEDfromHousing = trueRotBaseNEDfromBody@trueRotBodyFromStation@trueRo
 trueHousingXunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingXunitVec
 trueHousingYunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingYunitVec
 trueHousingZunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingZunitVec
-\endcode
+```
 
 ## Target (T)
 Initialized with a position offset relative to **BaseNED (N)**
@@ -258,13 +255,13 @@ Symbol | Variable
 \f$\vec{r}^N_{N/B}\f$ | trueBodyToBaseNEDposBaseNED
 \f$\vec{r}^N_{N/S}\f$ | trueStationToBaseNEDposBaseNED
 
-\code{.py}
+```python
 # Setup Target position
 trueTgtPosBaseNED = np.array([[1],[-2],[2]])
 trueBodyToTgtPosBaseNED = trueTgtPosBaseNED - trueBodyPosBaseNED
 trueStationToTgtPosBaseNED = trueTgtPosBaseNED - trueStationPosBaseNED
 trueHousingToTgtPosBaseNED = trueTgtPosBaseNED - trueHousingPosBaseNED
-\endcode
+```
 
 <!-- #region -->
 ## Gimbal Frame (G)
@@ -292,7 +289,7 @@ Tracking this angular offset is the purpose of any gimbal model (any model that 
 ## Stuck Gimbal
 Consider a mathematically simple, although tactically useless, gimbal model in which the **Gimbal (G)** is stuck at a fixed orientation a few degrees away from boresight of the **Housing (H)** frame in both azimuth and elevation.
 
-\code{.py}
+```python
 # Setup Gimbal coordinate frame
 trueGimbalXunitVec = iUnitVec
 trueGimbalYunitVec = jUnitVec
@@ -315,9 +312,9 @@ trueRotBaseNEDfromGimbal = trueRotBaseNEDfromHousing@trueRotHousingFromGimbal
 trueGimbalXunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalXunitVec
 trueGimbalYunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalYunitVec
 trueGimbalZunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalZunitVec
-\endcode
+```
 
-\code{.py}
+```python
 %matplotlib notebook
 fig = plt.figure()
 ax = plt.axes(projection="3d")
@@ -353,9 +350,7 @@ ax.view_init(30,20)
 ax.legend()
 
 plt.show()
-\endcode
+```
 
 ## Ideal Gimbal
 In some cases, an ideal gimbal would always point at the target. We can use other geometric terms to calculate the rotational offset between the **Gimbal (G)** and **Housing (H)** frames that achieves this goal...
-
-*/

@@ -1,4 +1,23 @@
-Software used to develop this codebase:
+Attempting to find the best combination of two tools:
+ - Doxygen for overall project documentation
+ - Jupyter Notebook for quick interactive visualizations
+
+Generate the Doxygen `html` documentation package:
+
+    doxygen Doxyfile
+
+Will Jupytext allow us to keep these files in sync?
+
+Synced   | File                         | Description                        | Links to Doxygen Output
+---------|-----------------------------|------------------------------------|---------------
+Manually | coordinate-frames.dox        | Doxygen C-style comment file       | [.html page name](coordinate-frames-dox.html) and [\\ref command](\ref coordinate-frames-dox)
+Manually | coordinate-frames.doxygen.md | Doxygen Markdown format            | [.html page name](md_coordinate-frames_8doxygen.html) and [.md file name](coordinate-frames.doxygen.md)
+Jupytext | coordinate-frames.ipynb      | Jupyter Notebook for interaction   ||
+Jupytext | coordinate-frames.md         | Jupytext (GitHub?) Markdown format ||
+Jupytext | coordinate-frames.py         | Python script                      ||
+
+
+## Dependencies
 
 Software           | Source
 -------------------|----------
