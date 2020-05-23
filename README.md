@@ -2,20 +2,25 @@ Attempting to find the best combination of two tools:
  - Doxygen for overall project documentation
  - Jupyter Notebook for quick interactive visualizations
 
-Generate the Doxygen `html` documentation package:
+Given an .ipynb file with LaTeX equations, I paired it with .py and .md
+files using Jupytext. I manually created a [Doxygen C-style comment
+file](http://doxygen.nl/manual/docblocks.html#cppblock) and a [Doxygen
+Markdown format file](http://doxygen.nl/manual/markdown.html) that
+contain the same content but have been updated to correctly render
+Doxygen .html pages with LaTeX equations. To generate the Doxygen `html`
+documentation package, call:
 
     doxygen Doxyfile
 
-Will Jupytext allow us to keep these files in sync?
+Would Jupytext allow us to automatically keep either of these* files in sync?
 
-Synced   | File                         | Description                        | Links to Doxygen Output
----------|-----------------------------|------------------------------------|---------------
-Manually | coordinate-frames.dox        | Doxygen C-style comment file       | [.html page name](coordinate-frames-dox.html) and [\\ref command](\ref coordinate-frames-dox)
-Manually | coordinate-frames.doxygen.md | Doxygen Markdown format            | [.html page name](md_coordinate-frames_8doxygen.html) and [.md file name](coordinate-frames.doxygen.md)
-Jupytext | coordinate-frames.ipynb      | Jupyter Notebook for interaction   ||
-Jupytext | coordinate-frames.md         | Jupytext (GitHub?) Markdown format ||
-Jupytext | coordinate-frames.py         | Python script                      ||
-
+Synced   | File                         | Description                        | Links to Doxygen Output                                                                                 | Diff From Jupytext .md
+---------|------------------------------|------------------------------------|---------------------------------------------------------------------------------------------------------|------------------------
+Manual*  | coordinate-frames.dox        | Doxygen C-style comment file       | [.html page name](coordinate-frames-dox.html) and [\\ref command](\ref coordinate-frames-dox)           | See d94e14c3 message
+Manual*  | coordinate-frames.doxygen.md | Doxygen Markdown format            | [.html page name](md_coordinate-frames_8doxygen.html) and [.md file name](coordinate-frames.doxygen.md) | See 52d6fc13 message
+Jupytext | coordinate-frames.ipynb      | Jupyter Notebook for interaction   |||
+Jupytext | coordinate-frames.md         | Jupytext (GitHub?) Markdown format |||
+Jupytext | coordinate-frames.py         | Python script                      |||
 
 ## Dependencies
 
