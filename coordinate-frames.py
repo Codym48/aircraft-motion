@@ -315,7 +315,7 @@ trueGimbalZunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalZunitVec
 # In[10]:
 
 
-get_ipython().run_line_magic('matplotlib', 'notebook')
+#get_ipython().run_line_magic('matplotlib', 'notebook')
 fig = plt.figure()
 ax = plt.axes(projection="3d")
 
