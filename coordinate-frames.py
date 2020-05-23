@@ -1,52 +1,64 @@
-#!/usr/bin/env python
-# coding: utf-8
+# ---
+# jupyter:
+#   jupytext:
+#     formats: ipynb,md,py:light
+#     text_representation:
+#       extension: .py
+#       format_name: light
+#       format_version: '1.5'
+#       jupytext_version: 1.4.2
+#   kernelspec:
+#     display_name: Python 3
+#     language: python
+#     name: python3
+# ---
 
 # # Vector Nomenclature
 # Points in 3D space shall be given unique names: $A$, $B$, etc.
-# 
+#
 # Coordinate frames shall be given unique names: $F$, $G$, etc.
 # The origin of frame $F$, when expressed as a point, is simply $F$.
-# 
+#
 # Position vector notion matches Stevens & Lewis. That is, the position vector of point $B$ with respect to point $A$ expressed in frame $F$ is:
-# 
+#
 # $$
 # \vec{r}^F_{B/A} \equiv X^F_{B/A}\vec{i}^F + Y^F_{B/A}\vec{j}^F + Z^F_{B/A}\vec{k}^F \equiv r^F_{x_{B/A}}\vec{i}^F + r^F_{y_{B/A}}\vec{j}^F + r^F_{z_{B/A}}\vec{k}^F
 # $$
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{r}^F_{B/A}$ | `trueAtoBposF`
 # $r^F_{x_{B/A}} \equiv X^F_{B/A}$ | `trueAtoBposFx`
 # $r^F_{y_{B/A}} \equiv Y^F_{B/A}$ | `trueAtoBposFy`
 # $r^F_{z_{B/A}} \equiv Z^F_{B/A}$ | `trueAtoBposFz`
-# 
+#
 # If the point from which the position is measured is equal to the origin of the frame in which the vector is expressed, it need not be called out explicitly:
-# 
+#
 # $$
 # \vec{r}^F_{B/F} \equiv \vec{r}^F_B
 # $$
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{r}^F_B$ | `trueBPosF`
 # $r^F_{x_{B}} \equiv X^F_{B}$ | `trueBposFx`
 # $r^F_{y_{B}} \equiv Y^F_{B}$ | `trueBposFy`
 # $r^F_{z_{B}} \equiv Z^F_{B}$ | `trueBposFz`
-# 
+#
 # Expressing unit vectors in their own frame is easy. For example, the 1st unit vector (the position of a point at 1.0 units along the $X$ axis with respect to the origin of the $F$ frame expressed in frame $F$ is:
-# 
+#
 # $$
 # \vec{i}^F \equiv \vec{i}^F_{X/F}
 # $$
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{i}^F$ | `trueFxUnitVec`
 # $\vec{j}^F$ | `trueFyUnitVec`
 # $\vec{k}^F$ | `trueFzUnitVec`
-# 
+#
 # Expressing them in another frame requires some additional language. The same vectors, expressed in frame $G$, are:
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{i}^G_{X/F}$ | `trueFxUnitVecG`
@@ -55,9 +67,7 @@
 
 # # Coordinate Frames
 
-# In[2]:
-
-
+# +
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
@@ -65,31 +75,25 @@ from mpl_toolkits import mplot3d
 iUnitVec = np.array([[1],[0],[0]])
 jUnitVec = np.array([[0],[1],[0]])
 kUnitVec = np.array([[0],[0],[1]])
-
-
-# In[3]:
-
+# -
 
 # Setup BaseNED origin and coordinate frame
 trueBaseNEDxUnitVec = iUnitVec
 trueBaseNEDyUnitVec = jUnitVec
 trueBaseNEDzUnitVec = kUnitVec
 
-
 # ## Body Frame (B)
 # The origin of this frame is the center of gravity (CG) of the flight vehicle. The position and attitude of this coordinate frame relative to others like **BaseNED (N)** will change over the course of flight.
-# 
+#
 # Initialize with a position and orientation offset relative to **BaseNED (N)**
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{r}^N_B$ | trueBodyPosBaseNED
 # $\tilde{T}_{B/N}$ | trueRotBodyFromBaseNED
 # $\tilde{T}_{N/B}$ | trueRotBaseNEDfromBody
 
-# In[4]:
-
-
+# +
 # Setup Body origin and coordinate frame
 trueBodyXunitVec = iUnitVec
 trueBodyYunitVec = jUnitVec
@@ -107,10 +111,7 @@ trueRotBaseNEDfromBody = trueRotBodyFromBaseNED.transpose()
 trueBodyXunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyXunitVec
 trueBodyYunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyYunitVec
 trueBodyZunitVecBaseNED = trueRotBaseNEDfromBody@trueBodyZunitVec
-
-
-# In[5]:
-
+# -
 
 # Apparently, matrix math in numpy requires the @ operator, not the * operator
 print(trueRotBaseNEDfromBody)
@@ -119,20 +120,19 @@ print(trueRotBaseNEDfromBody*trueBodyXunitVec)
 print(np.matmul(trueRotBaseNEDfromBody,trueBodyXunitVec))
 print(trueRotBaseNEDfromBody@trueBodyXunitVec)
 
-
 # ## Station Frame (S)
 # The origin of this frame is a fixed point on the body of the flight vehicle. We track this frame separately from **Body (B)** because the origin of that frame, the center of gravity (CG), may move in flight as fuel is consumed. We also allow a rotational offset between this frame and **Body (B)** for maximum flexbility.
-# 
+#
 # Initialize with a position and orientation offset relative to **Body (B)**. Calculate that position and orientation offset with respect to the **BaseNED (N)** frame:
-# 
+#
 # $$
 # \vec{r}^N_S = \vec{r}^N_{S/N} = \vec{r}^N_{S/B} + \vec{r}^N_{B/N} = \tilde{T}_{N/B}\vec{r}^B_{S/B} + \vec{r}^N_{B/N} = \tilde{T}_{N/B}\vec{r}^B_S + \vec{r}^N_B
 # $$
-# 
+#
 # $$
 # \tilde{T}_{N/S} = \tilde{T}_{N/B}\tilde{T}_{B/S}
 # $$
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{r}^B_S=\vec{r}^B_{S/B}$ | trueStationPosBody
@@ -141,21 +141,19 @@ print(trueRotBaseNEDfromBody@trueBodyXunitVec)
 # $\tilde{T}_{S/B}$ | trueRotStationFromBody
 # $\tilde{T}_{B/S}$ | trueRotBodyFromStation
 # $\tilde{T}_{N/S}$ | trueRotBaseNEDfromStation
-# 
+#
 # Also, calculate the opposite position offset vector. The location of the **Body (B)** origin in the **Station (S)** frame:
-# 
+#
 # $$
 # \vec{r}^S_B = \vec{r}^S_{B/S} = \tilde{T}_{S/B}\vec{r}^B_{B/S} = \tilde{T}_{S/B}(-\vec{r}^B_{S/B}) = -\tilde{T}_{S/B}\vec{r}^B_S
 # $$
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{r}^S_B=\vec{r}^S_{B/S}$ | trueBodyPosStation
 # $\vec{r}^B_{B/S}$ | trueStationToBodyPosBody
 
-# In[6]:
-
-
+# +
 # Setup Station origin and coordinate frame
 trueStationXunitVec = iUnitVec
 trueStationYunitVec = jUnitVec
@@ -178,21 +176,21 @@ print(trueBodyPosStation)
 trueStationXunitVecBaseNED = trueRotBaseNEDfromStation@trueStationXunitVec
 trueStationYunitVecBaseNED = trueRotBaseNEDfromStation@trueStationYunitVec
 trueStationZunitVecBaseNED = trueRotBaseNEDfromStation@trueStationZunitVec
-
+# -
 
 # ## Housing Frame (H)
 # This coordinate frame tracks how the stationary part of the gimbal is mounted onto the airframe. The origin is at the center of rotation of the gimbal, which is almost never the origin of the **Body (B)** or **Station (S)** frames.
-# 
+#
 # Initialize with a position and orientation offset relative to **Station (S)**. Calculate that position and orientation offset with respect to the **BaseNED (N)** frame:
-# 
+#
 # $$
 # \vec{r}^N_H = \vec{r}^N_{H/N} = \vec{r}^N_{H/S}+\vec{r}^N_{S/B}+\vec{r}^N_{B/N} = \vec{r}^N_{H/S}-\vec{r}^N_{B/S}+\vec{r}^N_{B/N} = \tilde{T}_{N/S}\vec{r}^S_{H/S}-\tilde{T}_{N/S}\vec{r}^S_{B/S}+\vec{r}^N_{B/N} = \tilde{T}_{N/S}\vec{r}^S_H-\tilde{T}_{N/S}\vec{r}^S_B+\vec{r}^N_B = \tilde{T}_{N/S}(\vec{r}^S_H-\vec{r}^S_B)+\vec{r}^N_B
 # $$
-# 
+#
 # $$
 # \tilde{T}_{N/H} = \tilde{T}_{N/B}\tilde{T}_{B/S}\tilde{T}_{S/H}
 # $$
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{r}^S_H=\vec{r}^S_{H/S}$ | trueHousingPosStation
@@ -203,9 +201,7 @@ trueStationZunitVecBaseNED = trueRotBaseNEDfromStation@trueStationZunitVec
 # $\tilde{T}_{H/S}$ | trueRotHousingFromStation
 # $\tilde{T}_{S/H}$ | trueRotStationFromHousing
 
-# In[7]:
-
-
+# +
 # Setup Housing origin and coordinate frame
 trueHousingXunitVec = iUnitVec
 trueHousingYunitVec = jUnitVec
@@ -225,17 +221,17 @@ trueRotBaseNEDfromHousing = trueRotBaseNEDfromBody@trueRotBodyFromStation@trueRo
 trueHousingXunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingXunitVec
 trueHousingYunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingYunitVec
 trueHousingZunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingZunitVec
-
+# -
 
 # ## Target (T)
 # Initialized with a position offset relative to **BaseNED (N)**
-# 
+#
 # $$
 # \vec{r}^N_T
 # $$
-# 
+#
 # Calculating position vectors from the origins of other coordinate frames to the **Target (T)**:
-# 
+#
 # $$
 # \vec{r}^N_{T/B} = \vec{r}^N_{T/N} + \vec{r}^N_{N/B} = \vec{r}^N_{T/N} - \vec{r}^N_{B/N} = \vec{r}^N_T - \vec{r}^N_B
 # $$
@@ -245,7 +241,7 @@ trueHousingZunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingZunitVec
 # $$
 # \vec{r}^N_{T/H} = \vec{r}^N_{T/N} + \vec{r}^N_{N/H} = \vec{r}^N_{T/N} - \vec{r}^N_{H/N} = \vec{r}^N_T - \vec{r}^N_H
 # $$
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\vec{r}^N_T=\vec{r}^N_{T/N}$ | trueTgtPosBaseNED
@@ -254,43 +250,37 @@ trueHousingZunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingZunitVec
 # $\vec{r}^N_{N/B}$ | trueBodyToBaseNEDposBaseNED
 # $\vec{r}^N_{N/S}$ | trueStationToBaseNEDposBaseNED
 
-# In[8]:
-
-
 # Setup Target position
 trueTgtPosBaseNED = np.array([[1],[-2],[2]])
 trueBodyToTgtPosBaseNED = trueTgtPosBaseNED - trueBodyPosBaseNED
 trueStationToTgtPosBaseNED = trueTgtPosBaseNED - trueStationPosBaseNED
 trueHousingToTgtPosBaseNED = trueTgtPosBaseNED - trueHousingPosBaseNED
 
-
 # ## Gimbal Frame (G)
 # This coordinate frame tracks how the rotating part of the gimbal (which often has something like a sensor mounted to it) is oriented relative to the **Housing (H)** frame. By definition, the origin of this frame is collocated with the origin of the **Housing (H)** frame at the center of rotation of the gimbal platform. That is, in any frame $F$:
-# 
+#
 # $$
 # \vec{r}^F_G \equiv \vec{r}^F_H
 # $$
-# 
-# 
+#
+#
 # Symbol | Variable
 # ---|---
 # $\vec{r}^F_G = \vec{r}^F_H$ | trueHousingPosF = trueGimbalPosF = trueGimbalPosF
-# 
+#
 # There can be an angular offset between this frame and the **Housing (H)** frame:
-# 
+#
 # Symbol | Variable
 # ---|---
 # $\tilde{T}_{G/H}$ | trueRotGimbalFromHousing
 # $\tilde{T}_{H/G}$ | trueRotHousingFromGimbal
-# 
+#
 # Tracking this angular offset is the purpose of any gimbal model (any model that extends the `Gimbal` base class.
 
 # ## Stuck Gimbal
 # Consider a mathematically simple, although tactically useless, gimbal model in which the **Gimbal (G)** is stuck at a fixed orientation a few degrees away from boresight of the **Housing (H)** frame in both azimuth and elevation.
 
-# In[9]:
-
-
+# +
 # Setup Gimbal coordinate frame
 trueGimbalXunitVec = iUnitVec
 trueGimbalYunitVec = jUnitVec
@@ -302,7 +292,10 @@ trueGimbalPosBaseNED = trueHousingPosBaseNED
 #from scipy.spatial.transform import Rotation as R
 #r = R.from_euler('yz', [15, 10], degrees=True)
 #trueRotGimbalFromHousing = r.as_matrix()
-trueRotGimbalFromHousing = np.array(    [[ 0.95125124, -0.17364818,  0.254887  ],     [ 0.16773126,  0.98480775,  0.04494346],     [-0.25881905,  0.        ,  0.96592583]])
+trueRotGimbalFromHousing = np.array(\
+    [[ 0.95125124, -0.17364818,  0.254887  ],\
+     [ 0.16773126,  0.98480775,  0.04494346],\
+     [-0.25881905,  0.        ,  0.96592583]])
 print(trueRotGimbalFromHousing)
 trueRotHousingFromGimbal = trueRotGimbalFromHousing.transpose()
 trueRotBaseNEDfromGimbal = trueRotBaseNEDfromHousing@trueRotHousingFromGimbal
@@ -311,11 +304,8 @@ trueGimbalXunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalXunitVec
 trueGimbalYunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalYunitVec
 trueGimbalZunitVecBaseNED = trueRotBaseNEDfromGimbal@trueGimbalZunitVec
 
-
-# In[10]:
-
-
-#get_ipython().run_line_magic('matplotlib', 'notebook')
+# +
+# %matplotlib notebook
 fig = plt.figure()
 ax = plt.axes(projection="3d")
 
@@ -350,7 +340,7 @@ ax.view_init(20,45)
 ax.legend()
 
 plt.show()
-
+# -
 
 # ## Ideal Gimbal
 # In some cases, an ideal gimbal would always point at the target. We can use other geometric terms to calculate the rotational offset between the **Gimbal (G)** and **Housing (H)** frames that achieves this goal...
