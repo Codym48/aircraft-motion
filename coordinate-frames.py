@@ -336,7 +336,7 @@ ax.set_ylim(-3,3)
 ax.set_zlim(-3,3)
 ax.invert_yaxis()
 ax.invert_zaxis()
-ax.view_init(20,45)
+ax.view_init(30,20)
 ax.legend()
 
 plt.show()
