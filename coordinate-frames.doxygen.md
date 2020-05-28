@@ -1,4 +1,6 @@
 <!--
+
+---
 jupyter:
   jupytext:
     formats: ipynb,md,py:percent
@@ -11,6 +13,8 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
+---
+
 -->
 
 # Vector Nomenclature
