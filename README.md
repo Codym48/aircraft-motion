@@ -19,7 +19,7 @@ Synced   | File                         | Description                        | L
 ---------|------------------------------|------------------------------------|---------------------------------------------------------------------------------------------------------|------------------------
 Manual*  | coordinate-frames.dox        | Doxygen C-style comment file       | [.html page name](coordinate-frames-dox.html) and [\\ref command](\ref coordinate-frames-dox)           | See d94e14c3 message
 Manual*  | coordinate-frames.doxygen.md | Doxygen Markdown format            | [.html page name](md_coordinate-frames_8doxygen.html) and [.md file name](coordinate-frames.doxygen.md) | See 52d6fc13 message
-Manual*  | coordinate-frames.doxygen.py | Python script with Doxygen comments| [.html page name](modules.html) | See 2e55cf0 message
+Manual*  | coordinate-frames.doxygen.py | Python script with Doxygen comments| [.html page name](namespacecoordinate-frames.html) and [\\ref command](\ref coordinate-frames) | See 952432e1 message
 Jupytext | coordinate-frames.ipynb      | Jupyter Notebook for interaction   |||
 Jupytext | coordinate-frames.md         | Jupytext (GitHub?) Markdown format |||
 Jupytext | coordinate-frames.py         | Python script                      |||
