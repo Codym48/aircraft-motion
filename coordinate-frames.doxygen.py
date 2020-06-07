@@ -15,8 +15,8 @@
 
 ## \file
 
-##
-# \defgroup Vector_Nomenclature Vector Nomenclature
+## @{
+# # Vector Nomenclature
 # Points in 3D space shall be given unique names: \f$A\f$, \f$B\f$, etc.
 #
 # Coordinate frames shall be given unique names: \f$F\f$, \f$G\f$, etc.
@@ -67,13 +67,11 @@
 # \f$\vec{i}^G_{X/F}\f$ | `trueFxUnitVecG`
 # \f$\vec{j}^G_{Y/F}\f$ | `trueFyUnitVecG`
 # \f$\vec{k}^G_{Z/F}\f$ | `trueFzUnitVecG`
-# @{
 
 ## @}
 
-##
-# \defgroup Coordinate_Frames Coordinate Frames
-# @{
+## @{
+# # Coordinate Frames
 
 # %%
 import numpy as np
@@ -92,8 +90,8 @@ trueBaseNEDzUnitVec = kUnitVec
 
 ## @}
 
-##
-# \defgroup Body_Frame_B Body Frame (B)
+## @{
+# ## Body Frame (B)
 # The origin of this frame is the center of gravity (CG) of the flight vehicle. The position and attitude of this coordinate frame relative to others like **BaseNED (N)** will change over the course of flight.
 #
 # Initialize with a position and orientation offset relative to **BaseNED (N)**
@@ -103,8 +101,6 @@ trueBaseNEDzUnitVec = kUnitVec
 # \f$\vec{r}^N_B\f$ | trueBodyPosBaseNED
 # \f$\tilde{T}_{B/N}\f$ | trueRotBodyFromBaseNED
 # \f$\tilde{T}_{N/B}\f$ | trueRotBaseNEDfromBody
-#
-# @{
 
 # %%
 # Setup Body origin and coordinate frame
@@ -135,8 +131,8 @@ print(trueRotBaseNEDfromBody@trueBodyXunitVec)
 
 ## @}
 
-##
-# \defgroup Station_Frame_S Station Frame (S)
+## @{
+# ## Station Frame (S)
 # The origin of this frame is a fixed point on the body of the flight vehicle. We track this frame separately from **Body (B)** because the origin of that frame, the center of gravity (CG), may move in flight as fuel is consumed. We also allow a rotational offset between this frame and **Body (B)** for maximum flexbility.
 #
 # Initialize with a position and orientation offset relative to **Body (B)**. Calculate that position and orientation offset with respect to the **BaseNED (N)** frame:
@@ -168,7 +164,6 @@ print(trueRotBaseNEDfromBody@trueBodyXunitVec)
 # ---|---
 # \f$\vec{r}^S_B=\vec{r}^S_{B/S}\f$ | trueBodyPosStation
 # \f$\vec{r}^B_{B/S}\f$ | trueStationToBodyPosBody
-# @{
 
 # %%
 # Setup Station origin and coordinate frame
@@ -196,8 +191,8 @@ trueStationZunitVecBaseNED = trueRotBaseNEDfromStation@trueStationZunitVec
 
 ## @}
 
-##
-# \defgroup Housing_Frame_H Housing Frame (H)
+## @{
+# ## Housing Frame (H)
 # This coordinate frame tracks how the stationary part of the gimbal is mounted onto the airframe. The origin is at the center of rotation of the gimbal, which is almost never the origin of the **Body (B)** or **Station (S)** frames.
 #
 # Initialize with a position and orientation offset relative to **Station (S)**. Calculate that position and orientation offset with respect to the **BaseNED (N)** frame:
@@ -219,7 +214,6 @@ trueStationZunitVecBaseNED = trueRotBaseNEDfromStation@trueStationZunitVec
 # \f$\vec{r}^N_{B/S}\f$ | trueStationToBodyPosBaseNED
 # \f$\tilde{T}_{H/S}\f$ | trueRotHousingFromStation
 # \f$\tilde{T}_{S/H}\f$ | trueRotStationFromHousing
-# @{
 
 # %%
 # Setup Housing origin and coordinate frame
@@ -244,8 +238,8 @@ trueHousingZunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingZunitVec
 
 ## @}
 
-##
-# \defgroup Target_T Target (T)
+## @{
+# ## Target (T)
 # Initialized with a position offset relative to **BaseNED (N)**
 #
 # \f[
@@ -271,7 +265,6 @@ trueHousingZunitVecBaseNED = trueRotBaseNEDfromHousing@trueHousingZunitVec
 # \f$\vec{r}^N_{T/S}\f$ | trueStationToTgtPosBaseNED
 # \f$\vec{r}^N_{N/B}\f$ | trueBodyToBaseNEDposBaseNED
 # \f$\vec{r}^N_{N/S}\f$ | trueStationToBaseNEDposBaseNED
-# @{
 
 # %%
 # Setup Target position
@@ -282,8 +275,8 @@ trueHousingToTgtPosBaseNED = trueTgtPosBaseNED - trueHousingPosBaseNED
 
 ## @}
 
-##
-# \defgroup Gimbal_Frame_G Gimbal Frame (G)
+## @{
+# ## Gimbal Frame (G)
 # This coordinate frame tracks how the rotating part of the gimbal (which often has something like a sensor mounted to it) is oriented relative to the **Housing (H)** frame. By definition, the origin of this frame is collocated with the origin of the **Housing (H)** frame at the center of rotation of the gimbal platform. That is, in any frame \f$F\f$:
 #
 # \f[
@@ -303,14 +296,12 @@ trueHousingToTgtPosBaseNED = trueTgtPosBaseNED - trueHousingPosBaseNED
 # \f$\tilde{T}_{H/G}\f$ | trueRotHousingFromGimbal
 #
 # Tracking this angular offset is the purpose of any gimbal model (any model that extends the `Gimbal` base class.
-# @{
 
 ## @}
 
-##
-# \defgroup Stuck_Gimbal Stuck Gimbal
+## @{
+# ## Stuck Gimbal
 # Consider a mathematically simple, although tactically useless, gimbal model in which the **Gimbal (G)** is stuck at a fixed orientation a few degrees away from boresight of the **Housing (H)** frame in both azimuth and elevation.
-# @{
 
 # %%
 # Setup Gimbal coordinate frame
@@ -376,5 +367,5 @@ plt.show()
 ## @}
 
 ##
-# \defgroup Ideal_Gimbal Ideal Gimbal
+# ## Ideal Gimbal
 # In some cases, an ideal gimbal would always point at the target. We can use other geometric terms to calculate the rotational offset between the **Gimbal (G)** and **Housing (H)** frames that achieves this goal...
